@@ -13,3 +13,4 @@
 
 Route::get('/', ['as' => 'home', 'uses' => 'PhotoController@index']);
 Route::get('photos/search', ['as' => 'search', 'uses' => 'PhotoController@search']);
+Route::get('photos/{id}', ['as' => 'show', 'uses' => 'PhotoController@show']);

@@ -18,11 +18,22 @@ class PhotoController extends Controller
         $this->flickr = $flickr;
     }
 
+    /**
+     * Home Page
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('photo.index');
     }
 
+    /**
+     * Photo list of search result
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function search(Request $request)
     {
         $this->validate($request,
@@ -32,10 +43,25 @@ class PhotoController extends Controller
 
         $search = $request->get('text');
         $page = $request->get('page');
-        $res = $this->flickr->getPhotoList($search, $page);
-        $photoList = $res['code'] == Flickr::$STATUS_OK ? $res['photos'] : [];
+        $data = $this->flickr->getPhotoList($search, $page);
+        $photoList = $data['code'] == Flickr::$STATUS_OK ? $data['photos'] : [];
         $url = route('search') . '?text=' . $search;
         return view('photo.list', compact('photoList', 'url'));
+    }
+
+    /**
+     * Show photo
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $data = $this->flickr->getPhotoInfo($id);
+        $photoInfo = $data['code'] == Flickr::$STATUS_OK ? $data['photo'] : [];
+        $data = $this->flickr->getPhoto($id);
+        $photo = $data['code'] == Flickr::$STATUS_OK ? $data['photo'] : [];
+        return view('photo.view', compact('photoInfo', 'photo'));
     }
 
 }

@@ -29,7 +29,7 @@
                     <tr>
                         <td class="text-center">{{ $photo->id }}</td>
                         <td class="text-left">{{ $photo->title }}</td>
-                        <td class="text-center"><a href="#" class="btn btn-sm btn-default" aria-hidden="true"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                        <td class="text-center"><a href="{{ route('show', ['id' => $photo->id]) }}" class="btn btn-sm btn-default" aria-hidden="true"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                     </tr>
                 @endforeach
                 </tbody>
