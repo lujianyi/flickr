@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', ['as' => 'home', 'uses' => 'PhotoController@index']);
+Route::get('photos/search', ['as' => 'search', 'uses' => 'PhotoController@search']);
