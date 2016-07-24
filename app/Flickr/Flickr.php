@@ -22,7 +22,6 @@ class Flickr
     public static $STATUS_DATA_STRUCTURE_ERROR = -3;
     public static $STATUS_DATA_ERROR = -4;
 
-    protected $photoSizeToShow = 'Original';
 
     /**
      * Flickr constructor.
@@ -150,10 +149,9 @@ class Flickr
             return ['code' => self::$STATUS_DATA_ERROR, 'message' => 'Data error'];
         }
 
-        $size = $this->photoSizeToShow;
         return ['code' => self::$STATUS_OK, 'photo' => last(
-                array_filter($resObj->sizes->size, function($value) use($size) {
-                    return str_is($size, $value->label);
+                array_filter($resObj->sizes->size, function($value) {
+                    return str_is('photo', $value->media);
             })
         )];
     }

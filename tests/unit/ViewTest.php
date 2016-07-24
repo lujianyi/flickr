@@ -6,6 +6,7 @@ class ViewTest extends TestCase
     protected $testErrorUrl = '/photos/28454417696111111';
     protected $testNonNumericUrl = '/photos/notanumber';
     protected $testVideoUrl = '/photos/28431594151';
+    protected $testNoOriginalUrl = '/photos/28227111990';
 
     public function testRoute()
     {
@@ -56,5 +57,11 @@ class ViewTest extends TestCase
     {
         $this->visit($this->testVideoUrl)
             ->seeElement('img', ['alt' => 'Mickey Mouse']);
+    }
+
+    public function testNoOriginalUrl()
+    {
+        $this->visit($this->testNoOriginalUrl)
+            ->seeElement('img', ['alt' => 'Modern Props. Planes and Copters 10 of 16']);
     }
 }
