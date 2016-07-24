@@ -5,6 +5,7 @@ class ViewTest extends TestCase
     protected $testUrl = '/photos/28454417696';
     protected $testErrorUrl = '/photos/28454417696111111';
     protected $testNonNumericUrl = '/photos/notanumber';
+    protected $testVideoUrl = '/photos/28431594151';
 
     public function testRoute()
     {
@@ -49,5 +50,11 @@ class ViewTest extends TestCase
     {
         $response = $this->call('GET', $this->testNonNumericUrl);
         $this->assertEquals(404, $response->status());
+    }
+
+    public function testVideoUrl()
+    {
+        $this->visit($this->testVideoUrl)
+            ->seeElement('img', ['alt' => 'Mickey Mouse']);
     }
 }
