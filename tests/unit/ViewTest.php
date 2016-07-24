@@ -4,6 +4,7 @@ class ViewTest extends TestCase
 {
     protected $testUrl = '/photos/28454417696';
     protected $testErrorUrl = '/photos/28454417696111111';
+    protected $testNonNumericUrl = '/photos/notanumber';
 
     public function testRoute()
     {
@@ -42,5 +43,11 @@ class ViewTest extends TestCase
         $this->visit($this->testErrorUrl)
             ->seeInElement('h3', 'No result found')
             ->dontSeeElement('table', ['class' => 'table table-striped table-bordered photo-info']);
+    }
+
+    public function testNonNumericUrl()
+    {
+        $response = $this->call('GET', $this->testNonNumericUrl);
+        $this->assertEquals(404, $response->status());
     }
 }
