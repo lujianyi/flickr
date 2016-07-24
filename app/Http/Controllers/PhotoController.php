@@ -33,7 +33,7 @@ class PhotoController extends Controller
         $search = $request->get('text');
         $page = $request->get('page');
         $res = $this->flickr->getPhotoList($search, $page);
-        $photoList = $res['code'] == 1 ? $res['photos'] : [];
+        $photoList = $res['code'] == Flickr::$STATUS_OK ? $res['photos'] : [];
         $url = route('search') . '?text=' . $search;
         return view('photo.list', compact('photoList', 'url'));
     }

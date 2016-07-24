@@ -16,6 +16,12 @@ class Flickr
 
     protected $pageSize = 20;
 
+    public static $STATUS_OK = 1;
+    public static $STATUS_INPUT_ERROR = -1;
+    public static $STATUS_CONNECTION_ERROR = -2;
+    public static $STATUS_DATA_STRUCTURE_ERROR = -3;
+    public static $STATUS_DATA_ERROR = -4;
+
     /**
      * Flickr constructor.
      */
@@ -36,7 +42,7 @@ class Flickr
     public function getPhotoList($text = null, $page = 1)
     {
         if(empty($text)){
-            return ['code' => -1, 'message' => 'Text is empty.'];
+            return ['code' => self::$STATUS_INPUT_ERROR, 'message' => 'Text is empty.'];
         }
 
         $requestUrl = $this->apiUrl;
@@ -51,21 +57,21 @@ class Flickr
             $res = file_get_contents($requestUrl);
         }
         catch (Exception $e) {
-            return ['code' => -2, 'message' => $e->getMessage()];
+            return ['code' => self::$STATUS_CONNECTION_ERROR, 'message' => $e->getMessage()];
         }
 
         try{
             $resObj = json_decode($res);
         }
         catch (Exception $e) {
-            return ['code' => -3, 'message' => $e->getMessage()];
+            return ['code' => self::$STATUS_DATA_STRUCTURE_ERROR, 'message' => $e->getMessage()];
         }
 
         if(!str_is('ok', $resObj->stat)){
-            return ['code' => -4, 'message' => 'Data error'];
+            return ['code' => self::$STATUS_DATA_ERROR, 'message' => 'Data error'];
         }
 
-        return ['code' => 1, 'photos' => $resObj->photos];
+        return ['code' => self::$STATUS_OK, 'photos' => $resObj->photos];
     }
 
     /**
@@ -76,7 +82,7 @@ class Flickr
      */
     public function getPhotoInfo($id){
         if(empty($id)){
-            return ['code' => -1, 'message' => 'Id is empty.'];
+            return ['code' => self::$STATUS_INPUT_ERROR, 'message' => 'Id is empty.'];
         }
 
         $requestUrl = $this->apiUrl;
@@ -89,21 +95,21 @@ class Flickr
             $res = file_get_contents($requestUrl);
         }
         catch (Exception $e) {
-            return ['code' => -2, 'message' => $e->getMessage()];
+            return ['code' => self::$STATUS_CONNECTION_ERROR, 'message' => $e->getMessage()];
         }
 
         try{
             $resObj = json_decode($res);
         }
         catch (Exception $e) {
-            return ['code' => -3, 'message' => $e->getMessage()];
+            return ['code' => self::$STATUS_DATA_STRUCTURE_ERROR, 'message' => $e->getMessage()];
         }
 
         if(empty($resObj->photo)){
-            return ['code' => -4, 'message' => 'Data error'];
+            return ['code' => self::$STATUS_DATA_ERROR, 'message' => 'Data error'];
         }
 
-        return ['code' => 1, 'photo' => $resObj->photo];
+        return ['code' => self::$STATUS_OK, 'photo' => $resObj->photo];
     }
 
     /**
@@ -115,7 +121,7 @@ class Flickr
     public function getPhoto($id)
     {
         if (empty($id)) {
-            return ['code' => -1, 'message' => 'Id is empty.'];
+            return ['code' => self::$STATUS_INPUT_ERROR, 'message' => 'Id is empty.'];
         }
 
         $requestUrl = $this->apiUrl;
@@ -128,27 +134,37 @@ class Flickr
             $res = file_get_contents($requestUrl);
         }
         catch (Exception $e) {
-            return ['code' => -2, 'message' => $e->getMessage()];
+            return ['code' => self::$STATUS_CONNECTION_ERROR, 'message' => $e->getMessage()];
         }
 
         try{
             $resObj = json_decode($res);
         }
         catch (Exception $e) {
-            return ['code' => -3, 'message' => $e->getMessage()];
+            return ['code' => self::$STATUS_DATA_STRUCTURE_ERROR, 'message' => $e->getMessage()];
         }
 
         if(!str_is('ok', $resObj->stat)){
-            return ['code' => -4, 'message' => 'Data error'];
+            return ['code' => self::$STATUS_DATA_ERROR, 'message' => 'Data error'];
         }
 
-        return ['code' => 1, 'photo' => array_pop($resObj->sizes->size)]; // get the largest photo size
+        return ['code' => self::$STATUS_OK, 'photo' => array_pop($resObj->sizes->size)]; // get the largest photo size
     }
 
+    /**
+     * Set json format
+     *
+     * @return string
+     */
     private function jsonFormat(){
         return 'format=json&nojsoncallback=1';
     }
 
+    /**
+     * set page size
+     *
+     * @return string
+     */
     private function pageSize(){
         return '&per_page=' . $this->pageSize;
     }
