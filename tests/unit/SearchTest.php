@@ -23,12 +23,12 @@ class SearchTest extends TestCase
         $this->visit($this->testUrl)
             ->seeElement('header', ['id' => 'nav-bar'])
             ->seeElement('div', ['id' => 'breadcrumb'])
-            ->see('Results')
-            ->see('photos found.')
+            ->seeInElement('h3', 'Results')
+            ->seeInElement('p', 'found.')
             ->seeElement('ul', ['class' => 'pagination'])
             ->seeElement('table', ['class' => 'table table-striped table-bordered'])
-            ->see('Id')
-            ->see('Title')
+            ->seeInElement('th', 'Id')
+            ->seeInElement('th', 'Title')
             ->seeElement('span', ['class' => 'glyphicon glyphicon-eye-open'])
             ->see('Designed and built by Jianyi (Jerry) LU');
     }

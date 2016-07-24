@@ -10,7 +10,6 @@ class IndexTest extends TestCase
     public function testRoute()
     {
         $response = $this->call('GET', '/');
-
         $this->assertEquals(200, $response->status());
     }
 
@@ -20,10 +19,10 @@ class IndexTest extends TestCase
             ->seeElement('header', ['id' => 'nav-bar'])
             ->seeElement('form', ['class' => 'form-inline'])
             ->seeElement('label', ['for' => 'text'])
-            ->see('Input text to search the photos')
+            ->seeInElement('label', 'Input text to search the photos')
             ->seeElement('input', ['type' => 'text', 'name' => 'text', 'placeholder' => 'search'])
             ->seeElement('button', ['type' => 'submit'])
-            ->see('Search')
+            ->seeInElement('button', 'Search')
             ->seeElement('img', ['alt' => 'Flickr'])
             ->see('Designed and built by Jianyi (Jerry) LU');
     }
